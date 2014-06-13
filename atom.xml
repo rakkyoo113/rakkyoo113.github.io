@@ -4,7 +4,7 @@
   <title><![CDATA[rakkyooの記録]]></title>
   <link href="http://rakkyoo113.github.io/atom.xml" rel="self"/>
   <link href="http://rakkyoo113.github.io/"/>
-  <updated>2014-06-13T15:17:39+09:00</updated>
+  <updated>2014-06-13T15:38:48+09:00</updated>
   <id>http://rakkyoo113.github.io/</id>
   <author>
     <name><![CDATA[rakkyoo113]]></name>
@@ -123,9 +123,9 @@ urlはサイトのurl、titleはブログのタイトル、といった感じで
 </pre></td><td class='code'><pre><code class=''><span class='line'>$ bundle exec rake setup_github_pages</span></code></pre></td></tr></table></div></figure>
 
 
-<p>の設定を行うと、「<em>deploy/.git」が作られます。<br/>
+<p>の設定を行うと、「_deploy/.git」が作られます。<br/>
 ここで、setup_github_pagesしたままですと、githubにdeployできませんでした。<br/>
-「</em>deploy/.git/config」を</p>
+「_deploy/.git/config」を</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>$ cat _deploy/.git/config</span></code></pre></td></tr></table></div></figure>
@@ -155,7 +155,113 @@ urlはサイトのurl、titleはブログのタイトル、といった感じで
 </span><span class='line'>  fetch = +refs/heads/*:refs/remotes/origin/*</span></code></pre></td></tr></table></div></figure>
 
 
+<p>このままで後述のdeployすると、以下のようなエラーがでます。</p>
 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>## Pushing generated _deploy website
+</span><span class='line'>remote: Permission to username/username.github.io.git denied to rakkyoo.
+</span><span class='line'>fatal: unable to access 'https://github.com/username/username.github.io.git/': The requested URL returned error: 403</span></code></pre></td></tr></table></div></figure>
+
+
+<p>私の環境では「_deploy/.git/config」を少し書き換えれば、このエラーがなくなりました。</p>
+
+<p>具体的には、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[remote "origin"]
+</span><span class='line'>  url = https://username@github.com/username/username.github.io.git
+</span><span class='line'>  fetch = +refs/heads/*:refs/remotes/origin/*</span></code></pre></td></tr></table></div></figure>
+
+
+<p>という感じに、「url = <a href="https://username@github.com/username/username.github.io.git">https://username@github.com/username/username.github.io.git</a> 」<br/>
+<strong>username@</strong>を追加しました。<br/>
+これだけでOKでした。</p>
+
+<h1>4.  デプロイ</h1>
+
+<p>あとは、デプロイすればサイトができます。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo bundle exec rake generate
+</span><span class='line'>$ sudo bundle exec rake deploy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>とするだけです。<br/>
+一括で、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo bundle exec rake gen_deploy</span></code></pre></td></tr></table></div></figure>
+
+
+<p>としてもいいようです。</p>
+
+<h1>日常の更新</h1>
+
+<p>markdownで記事を書いて、deployするだけです。</p>
+
+<h2>記事の新規作成</h2>
+
+<p>以下のようにターミナルから入力します。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ sudo bundle exec rake new_post['post title']</span></code></pre></td></tr></table></div></figure>
+
+
+<p>（post titleは英語のみだそうです)<br/>
+そうすると、<br/>
+「_source/posts/2014-06-132014-06-13-post-title.markdown」<br/>
+というファイルができます。開いてみると、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>---
+</span><span class='line'>layout: post
+</span><span class='line'>title: "post title"
+</span><span class='line'>date: 2014-06-13 14:17:07 +0900
+</span><span class='line'>comments: true
+</span><span class='line'>categories: 
+</span><span class='line'>---
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>このようになるので、「title」を修正して（日本語OK）、記事をMarkdownで書くのみです。</p>
+
+<h2>記事の確認</h2>
+
+<p>記事を確認したいときは、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ bundle exec rake preview</span></code></pre></td></tr></table></div></figure>
+
+
+<p>として、「localhost:4000」にブラウザからアクセスすれば確認できます。<br/>
+私の環境では、このままpreviewを起動しておいて、記事を編集して保存すれば反映されたので、確認しながら記事を書くことができてとっても快適です。</p>
+
+<h2>記事の投稿</h2>
+
+<p>上述していますが、以下のように入力するだけです。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ bundle exec rake gen_deploy</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>最後に</h1>
+
+<p>githubへの接続で相当悩みましたが(_deploy/.git/configの変更について)、それ以外はとってもスムーズで、とっても簡単でした。<br/>
+githubも含め、無料で快適なブログ環境が整ってしまうのは驚きでした。<br/>
+markdown記法の練習とgithubの練習がてら、楽しく更新していこうかと。</p>
+
+<p>いつまで続くことやら？</p>
 ]]></content>
   </entry>
   
