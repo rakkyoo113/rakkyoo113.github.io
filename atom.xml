@@ -4,7 +4,7 @@
   <title><![CDATA[rakkyooの記録]]></title>
   <link href="http://rakkyoo113.github.io/atom.xml" rel="self"/>
   <link href="http://rakkyoo113.github.io/"/>
-  <updated>2014-06-13T14:15:24+09:00</updated>
+  <updated>2014-06-13T15:17:39+09:00</updated>
   <id>http://rakkyoo113.github.io/</id>
   <author>
     <name><![CDATA[rakkyoo113]]></name>
@@ -12,6 +12,152 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Octpressを初めてみました]]></title>
+    <link href="http://rakkyoo113.github.io/blog/2014/06/13/begining-octpress/"/>
+    <updated>2014-06-13T14:17:07+09:00</updated>
+    <id>http://rakkyoo113.github.io/blog/2014/06/13/begining-octpress</id>
+    <content type="html"><![CDATA[<h1>最初に</h1>
+
+<p>Octpressを初めてみました。</p>
+
+<p><a href="http://octopress.org/" target="_blank"><img class="alignleft" align="left" border="0" src="http://capture.heartrails.com/75x75/shadow?http://octopress.org/" alt="" width="75" height="75" /></a><a style="color:#0070C5;" href="http://octopress.org/" target="_blank">Octopress</a><a href="http://b.hatena.ne.jp/entry/http://octopress.org/" target="_blank"><img src="http://b.hatena.ne.jp/entry/image/http://octopress.org/" alt="" /></a><br style="clear:both;" /><br></p>
+
+<p>githubの練習やMarkdown記法の練習を兼ねてと考えています。<br/>
+インストールなどはとっても簡単でしたが、githubとの接続で若干とまどったので、備忘録です。</p>
+
+<h1>インストール手順</h1>
+
+<p>いろいろなやり方はあるとは思うのですが、以下のような手順で環境構築しました。<br/>
+1.  githubにリポジトリの作成<br/>
+2.  ローカル（PC上）に環境構築<br/>
+3.  初期設定とgithubとの接続設定<br/>
+4.  デプロイ</p>
+
+<h1>1. githubにリポジトリの作成</h1>
+
+<h2>新規リポジトリの作成</h2>
+
+<p>「new repository」から、<br/>
+<img src="http://rakkyoo113.github.io/images/01GitHub_page.png" alt="github_page" /></p>
+
+<p>「Repository name」を入力：「<strong>username</strong>.github.io」とする。<br/>
+ここで、「<strong>username</strong>」はgithubのユーザー名とする。<br/>
+<img src="http://rakkyoo113.github.io/images/02github_repos.png" alt="github_rep" /></p>
+
+<h1>2.  ローカル（PC上）に環境構築</h1>
+
+<p>次に、ローカル上に環境を構築します。<br/>
+これは、とっても簡単です。</p>
+
+<h2>Octpressのソース取得</h2>
+
+<p>Octpressを管理したいディレクトリ上で、ターミナル上で以下のように入力します。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git clone git@github.com:imathis/octopress.git username.github.io</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>githubへのデプロイ用の環境設定</h2>
+
+<p>gitからcloneされたディレクトリに移動して、bundlerとgemをインストールします。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd username.github.io
+</span><span class='line'>$ sudo gem install bundler
+</span><span class='line'>$ sudo bundle install
+</span><span class='line'>$ sudo bundle exec rake install</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>githubへのデプロイ用の初期設定</h2>
+
+<p>ターミナル上で</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ bundle exec rake setup_github_pages</span></code></pre></td></tr></table></div></figure>
+
+
+<p>このように入力すると、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Enter the read/write url for your repository
+</span><span class='line'>(For example, 'git@github.com:your_username/your_username.github.io.git)
+</span><span class='line'>           or 'https://github.com/your_username/your_username.github.io')
+</span><span class='line'>Repository url: </span></code></pre></td></tr></table></div></figure>
+
+
+<p>こんな感じになるので、「Repository url: 」に続けて、githubのリポジトリ情報を入力します。</p>
+
+<h1>3.  初期設定とgithubとの接続設定</h1>
+
+<h2>初期設定</h2>
+
+<p>ローカルのディレクトリ内の「_config.yml」を編集することで初期設定などできます。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>url: 
+</span><span class='line'>title: 
+</span><span class='line'>subtitle: 
+</span><span class='line'>author: </span></code></pre></td></tr></table></div></figure>
+
+
+<p>取り急ぎは、上記のような項目（５〜８行目あたり）を編集すればいいと思います。<br/>
+urlはサイトのurl、titleはブログのタイトル、といった感じで、とってもわかりやすいです。</p>
+
+<h2>接続設定</h2>
+
+<p>私の環境では、ここが一番はまってしまったので、特に備忘録です。<br/>
+上述の</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ bundle exec rake setup_github_pages</span></code></pre></td></tr></table></div></figure>
+
+
+<p>の設定を行うと、「<em>deploy/.git」が作られます。<br/>
+ここで、setup_github_pagesしたままですと、githubにdeployできませんでした。<br/>
+「</em>deploy/.git/config」を</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat _deploy/.git/config</span></code></pre></td></tr></table></div></figure>
+
+
+<p>などで確認すると以下のような感じです。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[core]
+</span><span class='line'>  repositoryformatversion = 0
+</span><span class='line'>  filemode = true
+</span><span class='line'>  bare = false
+</span><span class='line'>  logallrefupdates = true
+</span><span class='line'>  ignorecase = true
+</span><span class='line'>  precomposeunicode = true
+</span><span class='line'>[remote "origin"]
+</span><span class='line'>  url = https://github.com/username/username.github.io.git
+</span><span class='line'>  fetch = +refs/heads/*:refs/remotes/origin/*</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[最初のポスト]]></title>
