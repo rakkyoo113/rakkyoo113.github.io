@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://rakkyoo113.github.io/sitemap.xml 

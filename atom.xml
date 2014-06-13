@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[My Octopress Blog]]></title>
+  <link href="http://rakkyoo113.github.io/atom.xml" rel="self"/>
+  <link href="http://rakkyoo113.github.io/"/>
+  <updated>2014-06-13T10:57:38+09:00</updated>
+  <id>http://rakkyoo113.github.io/</id>
+  <author>
+    <name><![CDATA[rakkyoo113]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[最初のポスト]]></title>
+    <link href="http://rakkyoo113.github.io/blog/2014/06/13/first-post/"/>
+    <updated>2014-06-13T10:36:39+09:00</updated>
+    <id>http://rakkyoo113.github.io/blog/2014/06/13/first-post</id>
+    <content type="html"><![CDATA[<h1>Octpressを用いたブログ</h1>
+
+<p>試しに最初のポストをしてみました。</p>
+]]></content>
+  </entry>
+  
+</feed>
