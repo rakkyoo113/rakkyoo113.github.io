@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby | rakkyooの記録]]></title>
+  <link href="http://rakkyoo113.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://rakkyoo113.github.io/"/>
+  <updated>2014-06-23T14:27:55+09:00</updated>
+  <id>http://rakkyoo113.github.io/</id>
+  <author>
+    <name><![CDATA[rakkyoo113]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[参照させない状態での配列の作成]]></title>
+    <link href="http://rakkyoo113.github.io/blog/2014/06/23/copy-2-dimension-array/"/>
+    <updated>2014-06-23T14:09:26+09:00</updated>
+    <id>http://rakkyoo113.github.io/blog/2014/06/23/copy-2-dimension-array</id>
+    <content type="html"><![CDATA[<p>久々にrubyでプログラムを書いているのですが、初歩的なところでつまずいています。<br/>
+たとえば、以下のように書いた場合、
+<code>
+array1 = ["value1", "value2"]
+array2 = [array1, 1,2,3]
+</code>
+array1の内容を変更すると、array2の内容も変更されます。
+```
+array1 = [&ldquo;value1&rdquo;, &ldquo;value2&rdquo;]
+array2 = [array1, 1,2,3]        # => [[&ldquo;value1&rdquo;, &ldquo;value2&rdquo;], 1, 2, 3]</p>
+
+<p>array1[0] = &ldquo;value0&rdquo;</p>
+
+<p>p array2</p>
+
+<h1>>> [[&ldquo;value0&rdquo;, &ldquo;value2&rdquo;], 1, 2, 3]</h1>
+
+<p>```
+array2の中でarray1を参照しているので、このようになるのは当たり前なのですが、array1の変更してもarray2の内容が更新されないようにするにはどうしたらいいかよくわかりませんでした。<br/>
+そこで、以下のサイトを参考に、</p>
+
+<ul>
+<a href="http://simanman.hatenablog.com/entry/2013/06/20/161437" target="_blank"><img class="alignleft" align="left" border="0" src="http://capture.heartrails.com/75x75/shadow?http://simanman.hatenablog.com/entry/2013/06/20/161437" alt="" width="75" height="75" /></a><a style="color:#0070C5;" href="http://simanman.hatenablog.com/entry/2013/06/20/161437" target="_blank">Rubyで二次元配列のコピー - simanmanのブログ</a><a href="http://b.hatena.ne.jp/entry/http://simanman.hatenablog.com/entry/2013/06/20/161437" target="_blank"><img src="http://b.hatena.ne.jp/entry/image/http://simanman.hatenablog.com/entry/2013/06/20/161437" alt="" /></a><br><span style="color: #808080;font-size: 80%;">Marshal.load ...</span><br style="clear:both;" /><br>
+</ul>
+
+
+<p>一番シンプルそうな書き方として、dubを用いて、
+```
+array1 = [&ldquo;value1&rdquo;, &ldquo;value2&rdquo;]
+array2 = [array1.map(&amp;:dup), 1,2,3]        # => [[&ldquo;value1&rdquo;, &ldquo;value2&rdquo;], 1, 2, 3]</p>
+
+<p>array1[0] = &ldquo;value0&rdquo;
+p array2</p>
+
+<h1>>> [[&ldquo;value1&rdquo;, &ldquo;value2&rdquo;], 1, 2, 3]</h1>
+
+<p>```
+「array1.map(&amp;:dup)」とすることでうまくいきました。</p>
+
+<p>他にやり方はあるのかもしれませんが、とりあえずはこれでOKです。</p>
+]]></content>
+  </entry>
+  
+</feed>
