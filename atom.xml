@@ -4,7 +4,7 @@
   <title><![CDATA[rakkyooの記録]]></title>
   <link href="http://rakkyoo113.github.io/atom.xml" rel="self"/>
   <link href="http://rakkyoo113.github.io/"/>
-  <updated>2014-06-23T14:27:55+09:00</updated>
+  <updated>2014-07-01T16:04:13+09:00</updated>
   <id>http://rakkyoo113.github.io/</id>
   <author>
     <name><![CDATA[rakkyoo113]]></name>
@@ -12,6 +12,150 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[rubyの配列で「参照」の疑問]]></title>
+    <link href="http://rakkyoo113.github.io/blog/2014/07/01/ruby-array/"/>
+    <updated>2014-07-01T17:49:22+09:00</updated>
+    <id>http://rakkyoo113.github.io/blog/2014/07/01/ruby-array</id>
+    <content type="html"><![CDATA[<h1>配列について</h1>
+
+<p>以下の本などで調べると、</p>
+
+<ul>
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=FFFFFF&IS1=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=snowly-22&o=9&p=8&l=as1&m=amazon&f=ifr&ref=qf_sp_asin_til&asins=4873113679" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+</ul>
+
+
+<p>「配列」とは、いくつかのオブジェクトへの参照を順に並べたもの<br/>
+という定義になっているとのこと。</p>
+
+<br>
+
+
+<h1>参照のチェック</h1>
+
+<p>参照先が変わった場合に、配列の要素が変わるかどうかチェックするため、以下のようなコードで確認をしたところ、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text = "test1"
+</span><span class='line'>array1 = ["test" ,text]
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span><span class='line'>text = "test2"
+</span><span class='line'># array1の内容が変わらない！(["test", "test2"]にならない！）
+</span><span class='line'>array1         # =&gt; ["test", "test1"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>変わっていませんでした。</p>
+
+<br>
+
+
+<p>ちなみに、以下のように書くと変わります。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text1 = "test1"
+</span><span class='line'>array1 = ["test" ,text1]
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span><span class='line'>text1[-1] = "2"
+</span><span class='line'># array1の内容が変わる！
+</span><span class='line'>array1         # =&gt; ["test", "test2"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>こっちではイメージ通りです。</p>
+
+<br>
+
+
+<h1>object_idでチェック</h1>
+
+<p>この違いがイマイチよくわからなくて、object_idで調べてみると、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text = "test1"
+</span><span class='line'>text.object_id                  # =&gt; 70252806544400
+</span><span class='line'>array1 = ["test" ,text]
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span><span class='line'>text = "test2"
+</span><span class='line'># object_idが変わっている！
+</span><span class='line'>text.object_id                  # =&gt; 70252806543340
+</span><span class='line'># array1の内容が変わらない！(["test", "test2"]にならない！）
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span></code></pre></td></tr></table></div></figure>
+
+
+<br>
+
+
+<p>ちなみに、当然なのですが、添字参照して変更した場合は、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text1 = "test1"
+</span><span class='line'>array1 = ["test" ,text1]
+</span><span class='line'>text.object_id                  # =&gt; 70329724769400
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span><span class='line'>text1[-1] = "2"
+</span><span class='line'># object_idが一緒
+</span><span class='line'>text.object_id                  # =&gt; 70329724769400
+</span><span class='line'># array1の内容が変わる！
+</span><span class='line'>array1         # =&gt; ["test", "test2"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>このようにobject_idが一緒なので、参照先は変わっていません。</p>
+
+<h1>まとめると</h1>
+
+<p>以下のように理解しました。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text1 = "test2"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>と</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text1 = String.new("test2)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>は同じであり、「test1 = &ldquo;test2&#8221;」とすることで、test1に代入しているわけではなく、新しいオブジェクトを作成していることとなるのですね。</p>
+
+<br>
+
+
+<p>あっているかどうかはわかりませんが、今の理解ではここまでです。<br></p>
+
+<br>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[参照させない状態での配列の作成]]></title>

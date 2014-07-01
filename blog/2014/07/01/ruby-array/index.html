@@ -1,0 +1,284 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>rubyの配列で「参照」の疑問 - rakkyooの記録</title>
+	<meta name="author" content="rakkyoo113">
+
+	
+	<meta name="description" content="配列について 以下の本などで調べると、 「配列」とは、いくつかのオブジェクトへの参照を順に並べたもの
+という定義になっているとのこと。 参照のチェック 参照先が変わった場合に、配列の要素が変わるかどうかチェックするため、以下のようなコードで確認をしたところ、 1
+2
+3
+4
+5
+6
+text &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="rakkyooの記録" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script async="true" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">rakkyooの記録</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:rakkyoo113.github.io">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/rakkyoo113" title="Twitter">Twitter</a>
+		
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:rakkyoo113.github.io">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Rubyの配列で「参照」の疑問</h2>
+	<div class="entry-content"><h1>配列について</h1>
+
+<p>以下の本などで調べると、</p>
+
+<ul>
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=FFFFFF&IS1=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=snowly-22&o=9&p=8&l=as1&m=amazon&f=ifr&ref=qf_sp_asin_til&asins=4873113679" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+</ul>
+
+
+<p>「配列」とは、いくつかのオブジェクトへの参照を順に並べたもの<br/>
+という定義になっているとのこと。</p>
+
+<br>
+
+
+<h1>参照のチェック</h1>
+
+<p>参照先が変わった場合に、配列の要素が変わるかどうかチェックするため、以下のようなコードで確認をしたところ、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text = "test1"
+</span><span class='line'>array1 = ["test" ,text]
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span><span class='line'>text = "test2"
+</span><span class='line'># array1の内容が変わらない！(["test", "test2"]にならない！）
+</span><span class='line'>array1         # =&gt; ["test", "test1"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>変わっていませんでした。</p>
+
+<br>
+
+
+<p>ちなみに、以下のように書くと変わります。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text1 = "test1"
+</span><span class='line'>array1 = ["test" ,text1]
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span><span class='line'>text1[-1] = "2"
+</span><span class='line'># array1の内容が変わる！
+</span><span class='line'>array1         # =&gt; ["test", "test2"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>こっちではイメージ通りです。</p>
+
+<br>
+
+
+<h1>object_idでチェック</h1>
+
+<p>この違いがイマイチよくわからなくて、object_idで調べてみると、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text = "test1"
+</span><span class='line'>text.object_id                  # =&gt; 70252806544400
+</span><span class='line'>array1 = ["test" ,text]
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span><span class='line'>text = "test2"
+</span><span class='line'># object_idが変わっている！
+</span><span class='line'>text.object_id                  # =&gt; 70252806543340
+</span><span class='line'># array1の内容が変わらない！(["test", "test2"]にならない！）
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span></code></pre></td></tr></table></div></figure>
+
+
+<br>
+
+
+<p>ちなみに、当然なのですが、添字参照して変更した場合は、</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text1 = "test1"
+</span><span class='line'>array1 = ["test" ,text1]
+</span><span class='line'>text.object_id                  # =&gt; 70329724769400
+</span><span class='line'>array1         # =&gt; ["test", "test1"]
+</span><span class='line'>text1[-1] = "2"
+</span><span class='line'># object_idが一緒
+</span><span class='line'>text.object_id                  # =&gt; 70329724769400
+</span><span class='line'># array1の内容が変わる！
+</span><span class='line'>array1         # =&gt; ["test", "test2"]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>このようにobject_idが一緒なので、参照先は変わっていません。</p>
+
+<h1>まとめると</h1>
+
+<p>以下のように理解しました。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text1 = "test2"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>と</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>text1 = String.new("test2)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>は同じであり、「test1 = &ldquo;test2&#8221;」とすることで、test1に代入しているわけではなく、新しいオブジェクトを作成していることとなるのですね。</p>
+
+<br>
+
+
+<p>あっているかどうかはわかりませんが、今の理解ではここまでです。<br></p>
+
+<br>
+
+
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-01T17:49:22+09:00" pubdate data-updated="true">Jul 1<span>st</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    rakkyoo113
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>
